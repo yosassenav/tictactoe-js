@@ -10,6 +10,7 @@ let cellsInfo = [
   { noCell: 9, isAvailable: true, card: null },
 ];
 
+//variable jugador inicializada con el simbolo X
 let player = "X";
 
 const combinacion1 = [0, 1, 2];
@@ -53,10 +54,10 @@ const validateCombination = (combination) => {
 const isTheWinner = () => {
   let ganador = null;
   combinations.forEach((combination) => {
-    const evaluacion = validateCombination(combination);
-    if (evaluacion != null) {
-      ganador = evaluacion;
-      console.log("gan este player: ", ganador);
+    const evaluation = validateCombination(combination);
+    if (evaluation != null) {
+      ganador = evaluation;
+      console.log("The winner is: ", ganador);
     }
   });
   return ganador;
@@ -64,9 +65,12 @@ const isTheWinner = () => {
 
 const clickCell = (event) => {
   if (cellsInfo[event.target.id - 1].isAvailable) {
+    //si la celda esta vacia, el jugador coloca su ficha
     event.target.innerText = player;
+    //una vez que el jugador coloca su ficha se actualiza la celda
     cellsInfo[event.target.id - 1].card = player;
     cellsInfo[event.target.id - 1].isAvailable = false;
+    //si el primer jugador puso una "X" el siguiente turno es para "O"
     player = player == "X" ? "O" : "X";
     const ganador = isTheWinner();
     console.log("este es el ganador", ganador);
@@ -78,7 +82,19 @@ const clickCell = (event) => {
   console.log(cellsInfo);
 };
 
-const htmlCells = Array.from(document.getElementsByTagName("td"));
+const htmlCells = Array.from(document.getElementsByTagName("button"));
 htmlCells.forEach((element) => {
   element.addEventListener("click", clickCell);
 });
+
+const resetButton = document.getElementById("reset");
+
+const reset = () => {
+  resetButton.addEventListener("click", () => {
+    htmlCells.forEach((element) => {
+      element.innerText = "";
+    });
+  });
+};
+
+reset();
